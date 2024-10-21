@@ -22,9 +22,9 @@ public class CourseService{
         return courseRepository.findById(id).get();
     }
 
-    public Course findInstructorByCourseId(int courseId){
-        return courseRepository.getCoursesByInstructorId(courseId);
-    }
+//    public Course findInstructorByCourseId(int courseId){
+//        return courseRepository.getCoursesByInstructorId(courseId);
+//    }
 
 
 }

@@ -3,14 +3,13 @@ package com.example.course_service.controller;
 import com.example.course_service.dto.StudentDTO;
 import com.example.course_service.entity.Course;
 import com.example.course_service.service.CourseService;
+import com.netflix.appinfo.InstanceInfo;
+import com.netflix.discovery.EurekaClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -24,6 +23,9 @@ public class CourseController {
 
     @Autowired
     private RestTemplate restTemplate;
+    @Autowired
+    private EurekaClient discoveryClient;
+
 
     @GetMapping
     public List<Course> getAllCourses() {
@@ -39,11 +41,18 @@ public class CourseController {
     public String getInstructorByCourseId(@RequestParam int courseId) {
         Course course = courseService.findById(courseId);
         int intructor = course.getInstructorId();
+        return null;
     }
 
     @GetMapping("/{id}/students")
-    public List<StudentDTO> getStudents(Integer courseId) {
-        String url = "http://localhost:8081/courses/" + courseId + "/students";  // Replace with the actual URL
+    public List<StudentDTO> getStudents( @PathVariable Integer id) {
+        InstanceInfo instance = discoveryClient.getNextServerFromEureka("student",
+                false);
+        System.out.println(instance.getHomePageUrl());
+
+        String url =
+                instance.getHomePageUrl() + "courses/" + id + "/students";  //
+        // Replace with the actual URL
 
         ResponseEntity<List<StudentDTO>> response = restTemplate.exchange(
                 url,
