@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("courses")
@@ -46,7 +47,7 @@ public class CourseController {
     }
 
     @GetMapping("/{id}/students")
-    public List<StudentDTO> getStudents(@PathVariable Integer id) {
+    public List<StudentDTO> getStudents(@PathVariable Integer id, @RequestHeader Map<String, String> headers) {
 //        InstanceInfo instance = discoveryClient.getNextServerFromEureka("student",
 //                false);
 //        System.out.println(instance.getHomePageUrl());
@@ -64,6 +65,7 @@ public class CourseController {
 //
 //        // Return the body of the response (which is the list of DTOs)
 //        return response.getBody();
+        System.out.println(headers);
         return client.getStudents(id);
     }
 }
