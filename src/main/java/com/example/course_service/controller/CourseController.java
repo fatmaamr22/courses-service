@@ -39,6 +39,7 @@ public class CourseController {
     public String getInstructorByCourseId(@RequestParam int courseId) {
         Course course = courseService.findById(courseId);
         int intructor = course.getInstructorId();
+        return intructor + "";
     }
 
     @GetMapping("/{id}/students")
